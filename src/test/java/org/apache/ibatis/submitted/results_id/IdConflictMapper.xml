@@ -22,7 +22,7 @@
 
 <mapper namespace="org.apache.ibatis.submitted.results_id.IdConflictMapper">
     <resultMap type="org.apache.ibatis.submitted.results_id.User"
-        id="userResult">
-        <id property="id" column="uid" />
+               id="userResult">
+        <id property="id" column="uid"/>
     </resultMap>
 </mapper>

@@ -23,8 +23,8 @@
 <configuration>
 
     <mappers>
-        <mapper resource="org/apache/ibatis/submitted/refid_resolution/ExternalMapper1.xml" />
-        <mapper resource="org/apache/ibatis/submitted/refid_resolution/ExternalMapper2.xml" />
+        <mapper resource="org/apache/ibatis/submitted/refid_resolution/ExternalMapper1.xml"/>
+        <mapper resource="org/apache/ibatis/submitted/refid_resolution/ExternalMapper2.xml"/>
     </mappers>
 
 </configuration>

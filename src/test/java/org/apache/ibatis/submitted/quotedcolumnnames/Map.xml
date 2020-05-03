@@ -33,7 +33,7 @@
 
     <resultMap id="myResultMap" type="java.util.HashMap">
         <result column="id" property="ID" javaType="java.lang.String"/>
-        <result column="FIRST_NAME" property="firstName" javaType="java.lang.String" />
+        <result column="FIRST_NAME" property="firstName" javaType="java.lang.String"/>
         <result column="LAST_NAME" property="lastName" javaType="java.lang.String"/>
     </resultMap>
 

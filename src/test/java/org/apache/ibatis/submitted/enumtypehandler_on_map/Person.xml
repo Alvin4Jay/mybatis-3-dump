@@ -38,12 +38,15 @@
 
 
     <select id="getByType" resultMap="personMap" parameterType="map">
-        SELECT <include refid="columns"/>
+        SELECT
+        <include refid="columns"/>
         FROM Person
         WHERE personType = #{type,jdbcType=VARCHAR}
     </select>
-    <select id="getByTypeNoParam" resultMap="personMap" parameterType="org.apache.ibatis.submitted.enumtypehandler_on_map.PersonMapper$TypeName">
-        SELECT <include refid="columns"/>
+    <select id="getByTypeNoParam" resultMap="personMap"
+            parameterType="org.apache.ibatis.submitted.enumtypehandler_on_map.PersonMapper$TypeName">
+        SELECT
+        <include refid="columns"/>
         FROM Person
         WHERE personType = #{type,jdbcType=VARCHAR}
     </select>

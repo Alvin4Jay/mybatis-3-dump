@@ -1,17 +1,17 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.ibatis.submitted.extends_with_constructor;
 
@@ -19,48 +19,47 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StudentConstructor {
-  public enum Constructor {
-    ID,
-    ID_NAME
-  }
+    private final int id;
+    private List<Constructor> constructors = new LinkedList<>();
+    private String name;
+    private Teacher teacher;
+    public StudentConstructor(Integer id) {
+        constructors.add(Constructor.ID);
+        this.id = id;
+    }
 
-  private List<Constructor> constructors = new LinkedList<>();
-  private final int id;
-  private String name;
-  private Teacher teacher;
+    public StudentConstructor(Integer id, String name) {
+        constructors.add(Constructor.ID_NAME);
+        this.id = id;
+        this.name = name;
+    }
 
-  public StudentConstructor(Integer id) {
-    constructors.add(Constructor.ID);
-    this.id = id;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public StudentConstructor(Integer id, String name) {
-    constructors.add(Constructor.ID_NAME);
-    this.id = id;
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public int getId() {
-    return id;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Teacher getTeacher() {
+        return teacher;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
 
-  public Teacher getTeacher() {
-    return teacher;
-  }
+    public List<Constructor> getConstructors() {
+        return constructors;
+    }
 
-  public void setTeacher(Teacher teacher) {
-    this.teacher = teacher;
-  }
-
-  public List<Constructor> getConstructors() {
-    return constructors;
-  }
+    public enum Constructor {
+        ID,
+        ID_NAME
+    }
 }

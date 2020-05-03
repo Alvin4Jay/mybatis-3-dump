@@ -124,7 +124,8 @@
         </collection>
     </resultMap>
 
-    <select id="selectByIdFidMultipleNullColumnsAndBrackets" resultMap="FatherMapFidMultipleNullColumnsAndBrackets" parameterType="int">
+    <select id="selectByIdFidMultipleNullColumnsAndBrackets" resultMap="FatherMapFidMultipleNullColumnsAndBrackets"
+            parameterType="int">
         SELECT id, name, Child.id AS child_id, Child.name AS child_name
         FROM Father
         LEFT JOIN Child ON Father.id = Child.father_id

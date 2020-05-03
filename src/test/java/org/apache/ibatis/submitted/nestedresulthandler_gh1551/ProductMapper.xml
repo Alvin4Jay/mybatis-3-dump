@@ -17,20 +17,20 @@
 
 -->
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.apache.ibatis.submitted.nestedresulthandler_gh1551.ProductMapper">
-  <resultMap id="AllInfoResultMap" type="ProductResp">
-    <id column="ID" property="id"/>
-    <result column="NAME" property="name"/>
-    <result column="CODE" property="code"/>
-    <result column="INFO_ID" property="productInfo.id"/>
-    <result column="ID" property="productInfo.productId"/>
-    <result column="INFO_OTHER_INFO" property="productInfo.otherInfo"/>
-    <collection property="skus" select="selectSkuByPk1" column="ID"/>
-  </resultMap>
-  <select id="selectAllInfo" resultMap="AllInfoResultMap">
+    <resultMap id="AllInfoResultMap" type="ProductResp">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="CODE" property="code"/>
+        <result column="INFO_ID" property="productInfo.id"/>
+        <result column="ID" property="productInfo.productId"/>
+        <result column="INFO_OTHER_INFO" property="productInfo.otherInfo"/>
+        <collection property="skus" select="selectSkuByPk1" column="ID"/>
+    </resultMap>
+    <select id="selectAllInfo" resultMap="AllInfoResultMap">
      select
         p.id,
         p.code,
@@ -42,13 +42,13 @@
       left join product_info i on p.id = i.product_id
       where p.code = #{code}
   </select>
-  <resultMap id="SkuResultMap" type="ProductSku">
-    <id column="ID" property="id"/>
-    <result column="PRODUCT_ID" property="productId"/>
-    <result column="COLOR" property="color"/>
-    <result column="SIZE" property="size"/>
-  </resultMap>
-  <select id="selectSkuByPk1" resultMap="SkuResultMap">
+    <resultMap id="SkuResultMap" type="ProductSku">
+        <id column="ID" property="id"/>
+        <result column="PRODUCT_ID" property="productId"/>
+        <result column="COLOR" property="color"/>
+        <result column="SIZE" property="size"/>
+    </resultMap>
+    <select id="selectSkuByPk1" resultMap="SkuResultMap">
     select * from product_sku where product_id = #{id} ORDER BY id
   </select>
 </mapper>

@@ -23,17 +23,17 @@
 <mapper namespace="org.apache.ibatis.submitted.parent_childs.Mapper">
 
     <resultMap id="ParentMap" type="org.apache.ibatis.submitted.parent_childs.Parent">
-        <result column="p_Id" property="id" />
-        <result column="p_Name" property="name" />
-        <result column="p_SurName" property="surName" />
-        <collection property="childs" resultMap="ChildMap" />
+        <result column="p_Id" property="id"/>
+        <result column="p_Name" property="name"/>
+        <result column="p_SurName" property="surName"/>
+        <collection property="childs" resultMap="ChildMap"/>
     </resultMap>
 
     <resultMap id="ChildMap" type="org.apache.ibatis.submitted.parent_childs.Child">
-        <result column="c_id" property="id" />
-        <result column="c_Name" property="name" />
-        <result column="c_SurName" property="surName" />
-        <result column="c_Age" property="age" />
+        <result column="c_id" property="id"/>
+        <result column="c_Name" property="name"/>
+        <result column="c_SurName" property="surName"/>
+        <result column="c_Age" property="age"/>
     </resultMap>
 
     <select id="getParents" resultMap="ParentMap">
@@ -50,18 +50,18 @@
     </select>
 
     <resultMap id="ParentMapConstructor" type="org.apache.ibatis.submitted.parent_childs.Parent">
-        <result column="p_Id" property="id" />
-        <result column="p_Name" property="name" />
-        <result column="p_SurName" property="surName" />
-        <collection property="childs" resultMap="ChildMapConstructor" />
+        <result column="p_Id" property="id"/>
+        <result column="p_Name" property="name"/>
+        <result column="p_SurName" property="surName"/>
+        <collection property="childs" resultMap="ChildMapConstructor"/>
     </resultMap>
 
     <resultMap id="ChildMapConstructor" type="org.apache.ibatis.submitted.parent_childs.Child">
         <constructor>
-	        <arg column="c_id" javaType="int"/>
-	        <arg column="c_Name" javaType="String"/>
-	        <arg column="c_SurName" javaType="String"/>
-	        <arg column="c_Age" javaType="int"/>
+            <arg column="c_id" javaType="int"/>
+            <arg column="c_Name" javaType="String"/>
+            <arg column="c_SurName" javaType="String"/>
+            <arg column="c_Age" javaType="int"/>
         </constructor>
     </resultMap>
 

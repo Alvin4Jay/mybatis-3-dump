@@ -25,8 +25,10 @@
     <resultMap id="ChildMap" type="Child">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
-        <association property="father" column="father_id" select="org.apache.ibatis.submitted.lazyload_common_property.FatherMapper.selectById"/>
-        <association property="grandFather" column="grand_father_id" select="org.apache.ibatis.submitted.lazyload_common_property.GrandFatherMapper.selectById"/>
+        <association property="father" column="father_id"
+                     select="org.apache.ibatis.submitted.lazyload_common_property.FatherMapper.selectById"/>
+        <association property="grandFather" column="grand_father_id"
+                     select="org.apache.ibatis.submitted.lazyload_common_property.GrandFatherMapper.selectById"/>
     </resultMap>
 
 

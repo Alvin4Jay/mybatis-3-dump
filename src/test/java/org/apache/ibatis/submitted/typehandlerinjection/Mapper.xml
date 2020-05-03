@@ -23,10 +23,11 @@
 <mapper namespace="org.apache.ibatis.submitted.typehandlerinjection.Mapper">
 
     <resultMap type="org.apache.ibatis.submitted.typehandlerinjection.User"
-        id="userResult">
-        <result property="id" column="id" />
-        <result property="name" column="name" />
-        <result property="state" column="state" typeHandler="org.apache.ibatis.submitted.typehandlerinjection.UserStateTypeHandler" />
+               id="userResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="state" column="state"
+                typeHandler="org.apache.ibatis.submitted.typehandlerinjection.UserStateTypeHandler"/>
     </resultMap>
 
     <select id="getUsers" resultMap="userResult">

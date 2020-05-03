@@ -22,11 +22,11 @@
 
 <mapper namespace="org.apache.ibatis.submitted.duplicate_resource_loaded.Mapper">
 
-  <resultMap id="BlogResult" type="HashMap">
-    <result property="id" column="id"/>
-  </resultMap>
+    <resultMap id="BlogResult" type="HashMap">
+        <result property="id" column="id"/>
+    </resultMap>
 
-  <select id="selectAllBlogs" resultMap="BlogResult">
+    <select id="selectAllBlogs" resultMap="BlogResult">
     select * from blog
   </select>
 </mapper>

@@ -24,7 +24,7 @@
     <select id="select" resultType="map">
         select
         <include
-            refid="org.apache.ibatis.submitted.refid_resolution.ExternalMapper2.externalColumnList" />
+            refid="org.apache.ibatis.submitted.refid_resolution.ExternalMapper2.externalColumnList"/>
         from table1
     </select>
     <insert id="insert" parameterType="map">
@@ -33,7 +33,7 @@
         </selectKey>
         insert into table1 (
         <include
-            refid="org.apache.ibatis.submitted.refid_resolution.ExternalMapper2.externalColumnList" />
+            refid="org.apache.ibatis.submitted.refid_resolution.ExternalMapper2.externalColumnList"/>
         ) values (#{field1},#{field2})
     </insert>
 </mapper>

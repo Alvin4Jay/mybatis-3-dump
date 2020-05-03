@@ -22,19 +22,19 @@
 
 <mapper namespace="org.apache.ibatis.submitted.array_type_handler.Mapper">
 
-  <insert id="insert"
-    parameterType="org.apache.ibatis.submitted.array_type_handler.User">
+    <insert id="insert"
+            parameterType="org.apache.ibatis.submitted.array_type_handler.User">
     insert into users
       (id, name, nicknames)
     values
       (#{id}, #{name}, #{nicknames,typeHandler=org.apache.ibatis.type.ArrayTypeHandler})
   </insert>
 
-  <select id="getUserCount" resultType="int">
+    <select id="getUserCount" resultType="int">
     select count(*) from users
   </select>
 
-  <select id="getNicknameCount" resultType="int">
+    <select id="getNicknameCount" resultType="int">
     select cardinality(nicknames) from users where id = 1
   </select>
 

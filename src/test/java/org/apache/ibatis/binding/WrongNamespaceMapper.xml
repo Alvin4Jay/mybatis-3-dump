@@ -22,7 +22,7 @@
 
 <mapper namespace="wrong.namespace">
 
-  <select id="get" resultType="string">
+    <select id="get" resultType="string">
     select 1
   </select>
 

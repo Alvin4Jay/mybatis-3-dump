@@ -22,17 +22,17 @@
 
 <mapper namespace="org.apache.ibatis.submitted.named_constructor_args.UseActualNameMapper">
 
-  <resultMap type="org.apache.ibatis.submitted.named_constructor_args.User"
-    id="twoArgsConstructorRM">
-    <constructor>
-      <!-- As the arg name is different from the property name,  -->
-      <!-- javaType must be specified.  -->
-      <idArg column="id" name="userId" javaType="int" />
-      <arg column="name" name="name" />
-    </constructor>
-  </resultMap>
+    <resultMap type="org.apache.ibatis.submitted.named_constructor_args.User"
+               id="twoArgsConstructorRM">
+        <constructor>
+            <!-- As the arg name is different from the property name,  -->
+            <!-- javaType must be specified.  -->
+            <idArg column="id" name="userId" javaType="int"/>
+            <arg column="name" name="name"/>
+        </constructor>
+    </resultMap>
 
-  <select id="mapConstructorWithoutParamAnnosXml" resultMap="twoArgsConstructorRM">
+    <select id="mapConstructorWithoutParamAnnosXml" resultMap="twoArgsConstructorRM">
     select * from users where id = #{id}
   </select>
 

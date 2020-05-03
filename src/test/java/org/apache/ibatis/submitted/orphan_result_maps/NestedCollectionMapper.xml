@@ -18,7 +18,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.apache.ibatis.submitted.orphan_result_maps.NestedCollectionMapper">
-  <select id="selectBlogWithPosts" resultMap="BlogResultMap">
+    <select id="selectBlogWithPosts" resultMap="BlogResultMap">
         select
             b.id as blog_id, b.title as blog_title,
             p.id as post_id, p.body as post_body
@@ -27,17 +27,17 @@
         where b.id = #{id}
     </select>
 
-  <resultMap id="BlogResultMap" type="Blog">
-    <constructor>
-      <idArg column="blog_id" name="id"/>
-      <arg column="blog_title" name="title"/>
-    </constructor>
-    <collection property="posts" ofType="Post">
-      <constructor>
-        <idArg column="post_id" name="id"/>
-        <arg column="post_body" name="body"/>
-      </constructor>
-    </collection>
-  </resultMap>
+    <resultMap id="BlogResultMap" type="Blog">
+        <constructor>
+            <idArg column="blog_id" name="id"/>
+            <arg column="blog_title" name="title"/>
+        </constructor>
+        <collection property="posts" ofType="Post">
+            <constructor>
+                <idArg column="post_id" name="id"/>
+                <arg column="post_body" name="body"/>
+            </constructor>
+        </collection>
+    </resultMap>
 
 </mapper>

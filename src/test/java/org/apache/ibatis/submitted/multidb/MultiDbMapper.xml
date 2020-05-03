@@ -28,7 +28,7 @@
     </select>
 
     <select id="select1" databaseId="hsql"
-        resultType="string" parameterType="int">
+            resultType="string" parameterType="int">
         select name from hsql where
         id=#{value}
     </select>
@@ -39,7 +39,7 @@
     </select>
 
     <select id="select2" databaseId="OTHER" resultType="string"
-        parameterType="int">
+            parameterType="int">
         select name from oracle where id=#{value}
     </select>
 
@@ -87,10 +87,10 @@
 
     <insert id="insert2" parameterType="org.apache.ibatis.submitted.multidb.User">
         <selectKey keyProperty="id" resultType="int" order="BEFORE">
-                select max(id) + 1 from common
+            select max(id) + 1 from common
         </selectKey>
         <selectKey keyProperty="id" resultType="int" order="BEFORE" databaseId="hsql">
-                select max(id) + 1 from hsql
+            select max(id) + 1 from hsql
         </selectKey>
         <if test="_databaseId == 'hsql'">
             insert into hsql values (#{id}, #{name})

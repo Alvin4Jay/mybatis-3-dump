@@ -23,9 +23,9 @@
 <mapper namespace="org.apache.ibatis.submitted.typehandler.Mapper">
 
     <resultMap type="org.apache.ibatis.submitted.typehandler.Product"
-        id="productResult">
-        <result property="id" column="id" />
-        <result property="name" column="name" />
+               id="productResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
     </resultMap>
 
     <select id="getProductByNameXml" resultMap="productResult">

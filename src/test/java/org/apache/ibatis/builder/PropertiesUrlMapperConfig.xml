@@ -22,8 +22,8 @@
 
 <configuration>
 
-  <properties url="file:./src/test/java/org/apache/ibatis/builder/jdbc.properties">
-    <property name="prop1" value="bbbb"/>
-  </properties>
+    <properties url="file:./src/test/java/org/apache/ibatis/builder/jdbc.properties">
+        <property name="prop1" value="bbbb"/>
+    </properties>
 
 </configuration>

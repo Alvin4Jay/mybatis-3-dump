@@ -22,8 +22,8 @@
 
 <configuration>
 
-  <mappers>
-    <mapper resource="org/apache/ibatis/submitted/integer_enum/Mapper.xml"/>
-  </mappers>
+    <mappers>
+        <mapper resource="org/apache/ibatis/submitted/integer_enum/Mapper.xml"/>
+    </mappers>
 
 </configuration>

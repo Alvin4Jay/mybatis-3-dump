@@ -27,10 +27,10 @@
     </select>
 
     <resultMap id="assetrightMap" type="org.apache.ibatis.submitted.primitives.Assetright">
-        <id property="id" column="ID" jdbcType="NUMERIC" />
-        <result property="name" column="NAME" jdbcType="VARCHAR" />
+        <id property="id" column="ID" jdbcType="NUMERIC"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
         <collection property="values" ofType="java.lang.Long">
-            <result column="ENTRY" jdbcType="NUMERIC" />
+            <result column="ENTRY" jdbcType="NUMERIC"/>
         </collection>
     </resultMap>
 

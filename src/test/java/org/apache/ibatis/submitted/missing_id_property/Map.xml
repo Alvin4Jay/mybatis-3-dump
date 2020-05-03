@@ -23,20 +23,20 @@
 <mapper namespace="org.apache.ibatis.submitted.missing_id_property.CarMapper">
 
     <resultMap id="carResult" type="Car">
-        <id column="id" /> <!-- id missing property attribute -->
-        <result property="name" column="name" />
+        <id column="id"/> <!-- id missing property attribute -->
+        <result property="name" column="name"/>
         <collection property="carParts"
-            column="id"
-            javaType="ArrayList"
-            ofType="Part"
-            select="getCarPartInfo" />
+                    column="id"
+                    javaType="ArrayList"
+                    ofType="Part"
+                    select="getCarPartInfo"/>
     </resultMap>
 
     <resultMap id="partResult" type="Part">
         <constructor>
             <arg column="name" javaType="String"/>
         </constructor>
-        <id column="partId" /> <!-- id missing property attribute -->
+        <id column="partId"/> <!-- id missing property attribute -->
     </resultMap>
 
     <select id="getCarsInfo" resultMap="carResult">

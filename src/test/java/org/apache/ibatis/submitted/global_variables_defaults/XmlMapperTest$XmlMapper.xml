@@ -37,7 +37,7 @@
     </select>
 
     <select id="selectFromVariable" flushCache="true" resultType="string">
-        <include refid="select" />
+        <include refid="select"/>
     </select>
 
     <sql id="select">

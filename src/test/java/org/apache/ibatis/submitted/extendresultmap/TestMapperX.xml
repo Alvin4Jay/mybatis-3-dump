@@ -20,8 +20,8 @@
 <mapper namespace="org.apache.ibatis.submitted.extendresultmap.TestMapperX">
 
     <resultMap type="org.apache.ibatis.submitted.extendresultmap.TestModel"
-        id="map">
-        <result property="b" column="A" />
+               id="map">
+        <result property="b" column="A"/>
     </resultMap>
 
 </mapper>

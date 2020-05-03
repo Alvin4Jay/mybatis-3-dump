@@ -22,13 +22,13 @@
 
 <mapper namespace="org.apache.ibatis.submitted.associationtype.Mapper">
 
- <resultMap id="sampleHashResult" type="hashmap">
-    <result property="f1" column="f1" />
-    <result property="f2" column="f2" />
-    <association property="a1" javaType="java.lang.String"
-        column="{param1=f1}" select="associationTest" />
-    <association property="a2" javaType="java.lang.String"
-        column="{param1=f1}" select="associationTest" />
+    <resultMap id="sampleHashResult" type="hashmap">
+        <result property="f1" column="f1"/>
+        <result property="f2" column="f2"/>
+        <association property="a1" javaType="java.lang.String"
+                     column="{param1=f1}" select="associationTest"/>
+        <association property="a2" javaType="java.lang.String"
+                     column="{param1=f1}" select="associationTest"/>
     </resultMap>
 
     <select id="getUser" resultMap="sampleHashResult">

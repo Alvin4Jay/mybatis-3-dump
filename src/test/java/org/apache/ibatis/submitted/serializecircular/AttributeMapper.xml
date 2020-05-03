@@ -22,7 +22,7 @@
 
 <mapper namespace="org.apache.ibatis.submitted.serializecircular.AttributeMapper">
     <resultMap id="map" type="org.apache.ibatis.submitted.serializecircular.Attribute">
-        <id column="nr_id" property="id" />
+        <id column="nr_id" property="id"/>
     </resultMap>
 
     <select id="getById" parameterType="Integer" resultMap="map">

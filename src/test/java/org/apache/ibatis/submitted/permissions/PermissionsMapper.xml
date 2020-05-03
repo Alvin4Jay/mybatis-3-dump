@@ -25,18 +25,18 @@
     <!-- testing nested result map loop -->
 
     <resultMap id="resourceResults" type="Resource">
-        <id property="name" column="resourceName" />
-        <collection property="principals" resultMap="principalResults" />
+        <id property="name" column="resourceName"/>
+        <collection property="principals" resultMap="principalResults"/>
     </resultMap>
 
     <resultMap id="principalResults" type="Principal">
-        <id property="principalName" column="principalName" />
-        <collection property="permissions" resultMap="permisionResults" />
+        <id property="principalName" column="principalName"/>
+        <collection property="permissions" resultMap="permisionResults"/>
     </resultMap>
 
     <resultMap id="permisionResults" type="Permission">
-        <result property="permission" column="permission" />
-        <association property="resource" resultMap="resourceResults" />
+        <result property="permission" column="permission"/>
+        <association property="resource" resultMap="resourceResults"/>
     </resultMap>
 
     <select id="getResources" resultMap="resourceResults">
@@ -46,21 +46,21 @@
     <!-- testing nested select loop -->
 
     <resultMap id="resourceResultsSelect" type="Resource">
-        <id property="name" column="resourceName" />
+        <id property="name" column="resourceName"/>
         <collection property="principals" select="getPrincipal"
-            column="resourceName" />
+                    column="resourceName"/>
     </resultMap>
 
     <resultMap id="principalResultsSelect" type="Principal">
-        <id property="principalName" column="principalName" />
+        <id property="principalName" column="principalName"/>
         <collection property="permissions" select="getPermission"
-            column="principalName" />
+                    column="principalName"/>
     </resultMap>
 
     <resultMap id="permisionResultsSelect" type="Permission">
-        <result property="permission" column="permission" />
+        <result property="permission" column="permission"/>
         <association property="resource" select="getResource"
-            column="permission" />
+                     column="permission"/>
     </resultMap>
 
     <select id="getResource" resultMap="resourceResultsSelect">

@@ -48,33 +48,34 @@
     </sql>
 
     <select id="getUserWithPets_Inline" resultMap="resultWithPets_Inline">
-        <include refid="selectUserPetBreeder" />
+        <include refid="selectUserPetBreeder"/>
     </select>
 
     <resultMap type="org.apache.ibatis.submitted.automapping.User" id="resultWithPets_Inline" autoMapping="true">
         <id column="id" property="id"/>
         <collection property="pets" ofType="org.apache.ibatis.submitted.automapping.Pet">
             <id column="petId" property="petId"/>
-            <association property="breeder" javaType="org.apache.ibatis.submitted.automapping.Breeder" autoMapping="true"/>
+            <association property="breeder" javaType="org.apache.ibatis.submitted.automapping.Breeder"
+                         autoMapping="true"/>
         </collection>
     </resultMap>
 
     <select id="getUserWithPets_External" resultMap="resultWithPets_External">
-        <include refid="selectUserPetBreeder" />
+        <include refid="selectUserPetBreeder"/>
     </select>
 
     <resultMap type="org.apache.ibatis.submitted.automapping.User" id="resultWithPets_External" autoMapping="true">
         <id column="id" property="id"/>
-        <collection property="pets" resultMap="petResult" />
+        <collection property="pets" resultMap="petResult"/>
     </resultMap>
 
     <resultMap type="org.apache.ibatis.submitted.automapping.Pet" id="petResult">
-        <id property="petId" column="petId" />
-        <association property="breeder" resultMap="breederResult" />
+        <id property="petId" column="petId"/>
+        <association property="breeder" resultMap="breederResult"/>
     </resultMap>
 
     <resultMap type="org.apache.ibatis.submitted.automapping.Breeder" id="breederResult" autoMapping="true">
-        <id property="breederId" column="breederId" />
+        <id property="breederId" column="breederId"/>
     </resultMap>
 
     <resultMap type="org.apache.ibatis.submitted.automapping.Book" id="bookResult">

@@ -31,16 +31,17 @@
     </select>
 
     <resultMap id="userResult"
-        type="org.apache.ibatis.submitted.column_forwarding.User">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="state" property="state" />
-        <association property="group" column="{id=group_id,state=state}" select="getGroup" javaType="org.apache.ibatis.submitted.column_forwarding.Group" />
+               type="org.apache.ibatis.submitted.column_forwarding.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <association property="group" column="{id=group_id,state=state}" select="getGroup"
+                     javaType="org.apache.ibatis.submitted.column_forwarding.Group"/>
     </resultMap>
 
     <resultMap id="groupResult"
-        type="org.apache.ibatis.submitted.column_forwarding.Group">
-        <id column="id" property="id" />
-        <result column="state" property="state" />
+               type="org.apache.ibatis.submitted.column_forwarding.Group">
+        <id column="id" property="id"/>
+        <result column="state" property="state"/>
     </resultMap>
 </mapper>

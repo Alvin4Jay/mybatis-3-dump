@@ -41,13 +41,13 @@
     </select>
 
     <resultMap type="map" id="mapResults">
-        <id column="id" property="id" />
+        <id column="id" property="id"/>
         <collection property="groups" ofType="string" javaType="list">
-            <result column="group_id" />
+            <result column="group_id"/>
         </collection>
         <collection property="roles" ofType="string" javaType="list">
             <result column="rol_id"/>
         </collection>
-  </resultMap>
+    </resultMap>
 
 </mapper>

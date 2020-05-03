@@ -23,11 +23,11 @@
 <mapper namespace="org.apache.ibatis.submitted.extend.ExtendMapper">
 
     <resultMap id="parentMap" type="org.apache.ibatis.submitted.extend.Parent">
-        <result property="myProperty" column="firstname" />
+        <result property="myProperty" column="firstname"/>
     </resultMap>
 
     <resultMap id="childMap" type="org.apache.ibatis.submitted.extend.Child" extends="parentMap">
-        <result property="myProperty" column="lastname" />
+        <result property="myProperty" column="lastname"/>
     </resultMap>
 
     <select id="selectParent" resultMap="parentMap">

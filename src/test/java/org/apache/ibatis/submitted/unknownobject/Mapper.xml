@@ -27,9 +27,9 @@
     </select>
 
     <resultMap type="org.apache.ibatis.submitted.unknownobject.User" id="map" autoMapping="false">
-        <result column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="unknownObject" property="unknownObject" />
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="unknownObject" property="unknownObject"/>
     </resultMap>
 
 </mapper>

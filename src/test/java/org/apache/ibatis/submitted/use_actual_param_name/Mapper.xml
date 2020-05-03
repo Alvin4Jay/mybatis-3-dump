@@ -22,20 +22,20 @@
 
 <mapper namespace="org.apache.ibatis.submitted.use_actual_param_name.Mapper">
 
-  <select id="getUsersByIdList" resultType="org.apache.ibatis.submitted.use_actual_param_name.User">
-    select * from users where id in
-    <foreach item="id" collection="list" open="(" close=")"
-      separator=",">
-      #{id}
-    </foreach>
-  </select>
+    <select id="getUsersByIdList" resultType="org.apache.ibatis.submitted.use_actual_param_name.User">
+        select * from users where id in
+        <foreach item="id" collection="list" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </select>
 
-  <select id="getUsersByIdListAndName" resultType="org.apache.ibatis.submitted.use_actual_param_name.User">
-    select * from users where id in
-    <foreach item="id" collection="param1" open="(" close=")"
-      separator=",">
-      #{id}
-    </foreach>
-  </select>
+    <select id="getUsersByIdListAndName" resultType="org.apache.ibatis.submitted.use_actual_param_name.User">
+        select * from users where id in
+        <foreach item="id" collection="param1" open="(" close=")"
+                 separator=",">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>

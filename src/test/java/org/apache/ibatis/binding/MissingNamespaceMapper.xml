@@ -22,7 +22,7 @@
 
 <mapper>
 
-  <select id="get" resultType="string">
+    <select id="get" resultType="string">
     select 1
   </select>
 

@@ -25,7 +25,8 @@
     <resultMap id="ChildMap" type="Child">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
-        <association property="father" column="father_id" select="org.apache.ibatis.submitted.deferload_common_property.FatherMapper.selectById"/>
+        <association property="father" column="father_id"
+                     select="org.apache.ibatis.submitted.deferload_common_property.FatherMapper.selectById"/>
     </resultMap>
 
 

@@ -22,7 +22,7 @@
 
 <mapper namespace="org.apache.ibatis.submitted.nestedresulthandler.Mapper">
     <resultMap id="personResult" type="org.apache.ibatis.submitted.nestedresulthandler.Person">
-        <id property="id" column="person_id" />
+        <id property="id" column="person_id"/>
         <result property="name" column="person_name"/>
         <collection property="items" ofType="org.apache.ibatis.submitted.nestedresulthandler.Item">
             <id property="id" column="item_id"/>
@@ -52,7 +52,7 @@
 
     <resultMap id="personItemPairResult" type="org.apache.ibatis.submitted.nestedresulthandler.PersonItemPair">
         <association property="person" javaType="org.apache.ibatis.submitted.nestedresulthandler.Person">
-            <id property="id" column="person_id" />
+            <id property="id" column="person_id"/>
             <result property="name" column="person_name"/>
         </association>
         <association property="item" javaType="org.apache.ibatis.submitted.nestedresulthandler.Item">

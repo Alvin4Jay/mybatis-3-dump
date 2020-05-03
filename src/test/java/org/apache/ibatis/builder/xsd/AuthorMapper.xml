@@ -16,50 +16,50 @@
        limitations under the License.
 
 -->
-<mapper namespace="org.apache.ibatis.builder.xsd.AuthorMapper"
-                xmlns="http://mybatis.org/schema/mybatis-mapper"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://mybatis.org/schema/mybatis-mapper http://mybatis.org/schema/mybatis-mapper.xsd">
+<mapper xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        namespace="org.apache.ibatis.builder.xsd.AuthorMapper"
+        xmlns="http://mybatis.org/schema/mybatis-mapper"
+        xsi:schemaLocation="http://mybatis.org/schema/mybatis-mapper http://mybatis.org/schema/mybatis-mapper.xsd">
 
     <parameterMap id="selectAuthor" type="org.apache.ibatis.domain.blog.Author">
-        <parameter property="id" />
+        <parameter property="id"/>
     </parameterMap>
 
     <resultMap id="selectAuthor" type="org.apache.ibatis.domain.blog.Author">
-        <id column="id" property="id" />
-        <result property="username" column="username" />
-        <result property="password" column="password" />
-        <result property="email" column="email" />
-        <result property="bio" column="bio" />
-        <result property="favouriteSection" column="favourite_section" />
+        <id column="id" property="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="bio" column="bio"/>
+        <result property="favouriteSection" column="favourite_section"/>
     </resultMap>
 
     <resultMap id="selectImmutableAuthor" type="org.apache.ibatis.domain.blog.ImmutableAuthor">
         <constructor>
-            <idArg column="id" javaType="_int" />
-            <arg column="username" javaType="string" />
-            <arg column="password" javaType="string" />
-            <arg column="email" javaType="string" />
-            <arg column="bio" javaType="string" />
-            <arg column="favourite_section" javaType="org.apache.ibatis.domain.blog.Section" />
+            <idArg column="id" javaType="_int"/>
+            <arg column="username" javaType="string"/>
+            <arg column="password" javaType="string"/>
+            <arg column="email" javaType="string"/>
+            <arg column="bio" javaType="string"/>
+            <arg column="favourite_section" javaType="org.apache.ibatis.domain.blog.Section"/>
         </constructor>
     </resultMap>
 
     <resultMap id="complexAuthorId" type="org.apache.ibatis.domain.blog.ComplexImmutableAuthorId">
         <constructor>
-            <idArg column="id" javaType="_int" />
-            <idArg column="username" javaType="string" />
-            <idArg column="password" javaType="string" />
-            <idArg column="email" javaType="string" />
+            <idArg column="id" javaType="_int"/>
+            <idArg column="username" javaType="string"/>
+            <idArg column="password" javaType="string"/>
+            <idArg column="email" javaType="string"/>
         </constructor>
     </resultMap>
 
     <resultMap id="selectComplexImmutableAuthor" type="org.apache.ibatis.domain.blog.ComplexImmutableAuthor">
         <constructor>
             <idArg javaType="org.apache.ibatis.domain.blog.ComplexImmutableAuthorId"
-                resultMap="complexAuthorId" />
-            <arg column="bio" javaType="string" />
-            <arg column="favourite_section" javaType="org.apache.ibatis.domain.blog.Section" />
+                   resultMap="complexAuthorId"/>
+            <arg column="bio" javaType="string"/>
+            <arg column="favourite_section" javaType="org.apache.ibatis.domain.blog.Section"/>
         </constructor>
     </resultMap>
 
@@ -97,13 +97,13 @@
     </select>
 
     <select id="selectImmutableAuthor" parameterMap="selectAuthor"
-        resultMap="selectImmutableAuthor">
+            resultMap="selectImmutableAuthor">
         select id, username, password, email, bio, favourite_section
         from author where id = ?
     </select>
 
     <select id="selectAuthorWithInlineParams" parameterType="int"
-        resultType="org.apache.ibatis.domain.blog.Author">
+            resultType="org.apache.ibatis.domain.blog.Author">
         select * from author where id = #{id}
     </select>
 
@@ -144,7 +144,8 @@
     </update>
 
     <select id="selectWithOptions" resultType="org.apache.ibatis.domain.blog.Author"
-        fetchSize="200" timeout="10" statementType="PREPARED" resultSetType="SCROLL_SENSITIVE" flushCache="false" useCache="false">
+            fetchSize="200" timeout="10" statementType="PREPARED" resultSetType="SCROLL_SENSITIVE" flushCache="false"
+            useCache="false">
         select * from author
     </select>
 

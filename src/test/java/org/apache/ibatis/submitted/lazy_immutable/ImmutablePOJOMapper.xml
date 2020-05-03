@@ -24,8 +24,8 @@
 
     <resultMap id="result" type="ImmutablePOJO">
         <constructor>
-            <idArg column="id" javaType="int" />
-            <arg column="description" javaType="string" />
+            <idArg column="id" javaType="int"/>
+            <arg column="description" javaType="string"/>
         </constructor>
     </resultMap>
 

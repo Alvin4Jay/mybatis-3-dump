@@ -28,7 +28,7 @@
 
     <resultMap type="org.apache.ibatis.submitted.cursor_simple.User" id="results">
         <id column="id" property="id"/>
-    <result property="name" column="name"/>
+        <result property="name" column="name"/>
     </resultMap>
 
 </mapper>

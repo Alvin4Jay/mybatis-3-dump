@@ -23,8 +23,10 @@
 <mapper namespace="org.apache.ibatis.submitted.serializecircular.PersonMapper">
 
     <resultMap id="map" type="org.apache.ibatis.submitted.serializecircular.Person">
-        <id column="id" property="id" />
-        <association column="nr_department" property="department" javaType="org.apache.ibatis.submitted.serializecircular.Department" select="org.apache.ibatis.submitted.serializecircular.DepartmentMapper.getById"/>
+        <id column="id" property="id"/>
+        <association column="nr_department" property="department"
+                     javaType="org.apache.ibatis.submitted.serializecircular.Department"
+                     select="org.apache.ibatis.submitted.serializecircular.DepartmentMapper.getById"/>
     </resultMap>
 
     <sql id="columns">

@@ -35,8 +35,8 @@
     </select>
 
     <resultMap type="org.apache.ibatis.submitted.call_setters_on_nulls.User" id="userMap">
-        <id property="id" column="id" />
-        <result property="name" column="name" />
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
     </resultMap>
 
     <select id="getNameOnly" resultType="map">
@@ -48,7 +48,7 @@
     </select>
 
     <resultMap type="map" id="mapResult">
-        <result column="name" property="name" />
+        <result column="name" property="name"/>
     </resultMap>
 
 </mapper>

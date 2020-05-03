@@ -22,7 +22,7 @@
 
 <mapper namespace="org.apache.ibatis.submitted.javassist.Mapper">
 
-    <select id="getUser" resultMap="users" >
+    <select id="getUser" resultMap="users">
         select * from users
     </select>
 
@@ -31,9 +31,10 @@
     </select>
 
     <resultMap type="org.apache.ibatis.submitted.javassist.User" id="users">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <collection property="groups" column="id" ofType="org.apache.ibatis.submitted.javassist.Group" select="getGroupsForUser" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="groups" column="id" ofType="org.apache.ibatis.submitted.javassist.Group"
+                    select="getGroupsForUser"/>
     </resultMap>
 
 </mapper>

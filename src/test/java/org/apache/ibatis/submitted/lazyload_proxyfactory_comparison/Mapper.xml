@@ -24,10 +24,11 @@
 
     <!-- UserWithGetObjectWithInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetObjectWithInterface" id="user_with_get_object_with_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetObjectWithInterface"
+               id="user_with_get_object_with_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithGetObjectWithInterface" resultMap="user_with_get_object_with_interface_map">
@@ -36,10 +37,11 @@
 
     <!-- UserWithGetObjectWithoutInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetObjectWithoutInterface" id="user_with_get_object_without_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetObjectWithoutInterface"
+               id="user_with_get_object_without_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithGetObjectWithoutInterface" resultMap="user_with_get_object_without_interface_map">
@@ -48,10 +50,11 @@
 
     <!-- UserWithGetXxxWithInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetXxxWithInterface" id="user_with_get_xxx_with_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetXxxWithInterface"
+               id="user_with_get_xxx_with_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithGetXxxWithInterface" resultMap="user_with_get_xxx_with_interface_map">
@@ -60,10 +63,11 @@
 
     <!-- UserWithGetXxxWithoutInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetXxxWithoutInterface" id="user_with_get_xxx_without_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithGetXxxWithoutInterface"
+               id="user_with_get_xxx_without_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithGetXxxWithoutInterface" resultMap="user_with_get_xxx_without_interface_map">
@@ -72,10 +76,11 @@
 
     <!-- UserWithNothingWithInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithNothingWithInterface" id="user_with_nothing_with_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithNothingWithInterface"
+               id="user_with_nothing_with_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithNothingWithInterface" resultMap="user_with_nothing_with_interface_map">
@@ -84,10 +89,11 @@
 
     <!-- UserWithNothingWithoutInterface -->
 
-    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithNothingWithoutInterface" id="user_with_nothing_without_interface_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <association property="owner" column="owner_id" select="getGroup" />
+    <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.UserWithNothingWithoutInterface"
+               id="user_with_nothing_without_interface_map">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <association property="owner" column="owner_id" select="getGroup"/>
     </resultMap>
 
     <select id="getUserWithNothingWithoutInterface" resultMap="user_with_nothing_without_interface_map">
@@ -97,8 +103,8 @@
     <!-- Group -->
 
     <resultMap type="org.apache.ibatis.submitted.lazyload_proxyfactory_comparison.Group" id="group_map">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
     </resultMap>
 
     <select id="getGroup" resultMap="group_map">
