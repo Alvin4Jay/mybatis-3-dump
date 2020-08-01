@@ -146,6 +146,7 @@ public abstract class BaseBuilder {
     }
 
     protected <T> Class<? extends T> resolveAlias(String alias) {
+        // 通过别名注册器解析别名对应的类型 Class
         return typeAliasRegistry.resolveAlias(alias);
     }
 }

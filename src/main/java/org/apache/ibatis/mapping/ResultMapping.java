@@ -252,7 +252,7 @@ public class ResultMapping {
         }
 
         public ResultMapping build() {
-            // lock down collections
+            // lock down collections 将 flags 和 composites 两个集合变为不可修改集合
             resultMapping.flags = Collections.unmodifiableList(resultMapping.flags);
             resultMapping.composites = Collections.unmodifiableList(resultMapping.composites);
             resolveTypeHandler();
@@ -263,15 +263,19 @@ public class ResultMapping {
         private void validate() {
             // Issue #697: cannot define both nestedQueryId and nestedResultMapId
             if (resultMapping.nestedQueryId != null && resultMapping.nestedResultMapId != null) {
-                throw new IllegalStateException("Cannot define both nestedQueryId and nestedResultMapId in property " + resultMapping.property);
+                throw new IllegalStateException("Cannot define both nestedQueryId and nestedResultMapId in property "
+                    + resultMapping.property);
             }
             // Issue #5: there should be no mappings without typehandler
-            if (resultMapping.nestedQueryId == null && resultMapping.nestedResultMapId == null && resultMapping.typeHandler == null) {
+            if (resultMapping.nestedQueryId == null && resultMapping.nestedResultMapId == null
+                && resultMapping.typeHandler == null) {
                 throw new IllegalStateException("No typehandler found for property " + resultMapping.property);
             }
             // Issue #4 and GH #39: column is optional only in nested resultmaps but not in the rest
-            if (resultMapping.nestedResultMapId == null && resultMapping.column == null && resultMapping.composites.isEmpty()) {
-                throw new IllegalStateException("Mapping is missing column attribute for property " + resultMapping.property);
+            if (resultMapping.nestedResultMapId == null && resultMapping.column == null
+                && resultMapping.composites.isEmpty()) {
+                throw new IllegalStateException("Mapping is missing column attribute for property "
+                    + resultMapping.property);
             }
             if (resultMapping.getResultSet() != null) {
                 int numColumns = 0;
@@ -283,7 +287,8 @@ public class ResultMapping {
                     numForeignColumns = resultMapping.foreignColumn.split(",").length;
                 }
                 if (numColumns != numForeignColumns) {
-                    throw new IllegalStateException("There should be the same number of columns and foreignColumns in property " + resultMapping.property);
+                    throw new IllegalStateException("There should be the same number of columns and " +
+                        "foreignColumns in property " + resultMapping.property);
                 }
             }
         }
@@ -292,7 +297,8 @@ public class ResultMapping {
             if (resultMapping.typeHandler == null && resultMapping.javaType != null) {
                 Configuration configuration = resultMapping.configuration;
                 TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-                resultMapping.typeHandler = typeHandlerRegistry.getTypeHandler(resultMapping.javaType, resultMapping.jdbcType);
+                resultMapping.typeHandler =
+                    typeHandlerRegistry.getTypeHandler(resultMapping.javaType, resultMapping.jdbcType);
             }
         }
 

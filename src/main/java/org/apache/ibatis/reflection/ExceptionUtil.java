@@ -27,6 +27,9 @@ public class ExceptionUtil {
         // Prevent Instantiation
     }
 
+    /**
+     * 获取真正的异常
+     */
     public static Throwable unwrapThrowable(Throwable wrapped) {
         Throwable unwrapped = wrapped;
         while (true) {

@@ -37,7 +37,8 @@ import java.util.List;
  */
 public class SimpleStatementHandler extends BaseStatementHandler {
 
-    public SimpleStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    public SimpleStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter,
+                                  RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         super(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
     }
 

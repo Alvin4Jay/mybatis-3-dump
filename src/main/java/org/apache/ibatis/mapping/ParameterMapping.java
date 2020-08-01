@@ -145,6 +145,10 @@ public class ParameterMapping {
             parameterMapping.mode = ParameterMode.IN;
         }
 
+        /**
+         * @param property 属性名
+         * @param javaType 属性类型
+         */
         public Builder(Configuration configuration, String property, Class<?> javaType) {
             parameterMapping.configuration = configuration;
             parameterMapping.property = property;
@@ -218,7 +222,8 @@ public class ParameterMapping {
             if (parameterMapping.typeHandler == null && parameterMapping.javaType != null) {
                 Configuration configuration = parameterMapping.configuration;
                 TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-                parameterMapping.typeHandler = typeHandlerRegistry.getTypeHandler(parameterMapping.javaType, parameterMapping.jdbcType);
+                parameterMapping.typeHandler =
+                    typeHandlerRegistry.getTypeHandler(parameterMapping.javaType, parameterMapping.jdbcType);
             }
         }
 

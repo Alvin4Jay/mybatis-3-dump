@@ -46,16 +46,19 @@ public class PerpetualCache implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
+        // 存储键值对到 HashMap
         cache.put(key, value);
     }
 
     @Override
     public Object getObject(Object key) {
+        // 查询缓存
         return cache.get(key);
     }
 
     @Override
     public Object removeObject(Object key) {
+        // 删除缓存
         return cache.remove(key);
     }
 

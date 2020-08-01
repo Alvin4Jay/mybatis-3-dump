@@ -113,16 +113,25 @@ public class TypeAliasRegistry {
     }
 
     public void registerAliases(String packageName) {
+        // 调用重载方法注册别名
         registerAliases(packageName, Object.class);
     }
 
     public void registerAliases(String packageName, Class<?> superType) {
+        // TODO 查找类过程 待看
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
+        /*
+         * 查找指定包下的父类为 superType 的类。从调用栈来看，这里的
+         * superType = Object.class，所以 ResolverUtil 将查找所有的类。
+         * 查找完成后，查找结果将会被缓存到内部集合中。
+         */
         resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
+        // 获取查找结果
         Set<Class<? extends Class<?>>> typeSet = resolverUtil.getClasses();
         for (Class<?> type : typeSet) {
             // Ignore inner classes and interfaces (including package-info.java)
             // Skip also inner classes. See issue #6
+            // 忽略匿名类，接口，内部类
             if (!type.isAnonymousClass() && !type.isInterface() && !type.isMemberClass()) {
                 registerAlias(type);
             }
@@ -130,10 +139,10 @@ public class TypeAliasRegistry {
     }
 
     public void registerAlias(Class<?> type) {
-        String alias = type.getSimpleName();
+        String alias = type.getSimpleName(); // 简单名称
         Alias aliasAnnotation = type.getAnnotation(Alias.class);
         if (aliasAnnotation != null) {
-            alias = aliasAnnotation.value();
+            alias = aliasAnnotation.value(); // 从注解中获取别名
         }
         registerAlias(alias, type);
     }
@@ -143,7 +152,7 @@ public class TypeAliasRegistry {
             throw new TypeException("The parameter alias cannot be null");
         }
         // issue #748
-        String key = alias.toLowerCase(Locale.ENGLISH);
+        String key = alias.toLowerCase(Locale.ENGLISH); // 将别名转成小写
         if (typeAliases.containsKey(key) && typeAliases.get(key) != null && !typeAliases.get(key).equals(value)) {
             throw new TypeException("The alias '" + alias + "' is already mapped to the value '" + typeAliases.get(key).getName() + "'.");
         }

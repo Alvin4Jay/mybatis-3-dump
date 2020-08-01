@@ -30,23 +30,29 @@ import java.util.List;
  */
 public interface StatementHandler {
 
-    Statement prepare(Connection connection, Integer transactionTimeout)
-        throws SQLException;
+    /**
+     * 创建statement
+     */
+    Statement prepare(Connection connection, Integer transactionTimeout) throws SQLException;
 
-    void parameterize(Statement statement)
-        throws SQLException;
+    /**
+     * 为statement设置参数值
+     */
+    void parameterize(Statement statement) throws SQLException;
 
-    void batch(Statement statement)
-        throws SQLException;
+    void batch(Statement statement) throws SQLException;
 
-    int update(Statement statement)
-        throws SQLException;
+    /**
+     * 执行更新操作
+     */
+    int update(Statement statement) throws SQLException;
 
-    <E> List<E> query(Statement statement, ResultHandler resultHandler)
-        throws SQLException;
+    /**
+     * 执行查询操作
+     */
+    <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException;
 
-    <E> Cursor<E> queryCursor(Statement statement)
-        throws SQLException;
+    <E> Cursor<E> queryCursor(Statement statement) throws SQLException;
 
     BoundSql getBoundSql();
 

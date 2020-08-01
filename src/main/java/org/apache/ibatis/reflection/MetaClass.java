@@ -133,15 +133,21 @@ public class MetaClass {
     }
 
     public boolean hasSetter(String name) {
+        // 属性分词器，用于解析属性名
         PropertyTokenizer prop = new PropertyTokenizer(name);
+        // hasNext 返回 true，则表明 name 是一个复合属性，xx.yy
         if (prop.hasNext()) {
+            // 调用 reflector 的 hasSetter 方法
             if (reflector.hasSetter(prop.getName())) {
+                // 为属性创建创建 MetaClass
                 MetaClass metaProp = metaClassForProperty(prop.getName());
+                // 再次调用 hasSetter
                 return metaProp.hasSetter(prop.getChildren());
             } else {
                 return false;
             }
         } else {
+            // 调用 reflector 的 hasSetter 方法
             return reflector.hasSetter(prop.getName());
         }
     }

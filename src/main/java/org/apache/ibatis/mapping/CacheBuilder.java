@@ -85,15 +85,19 @@ public class CacheBuilder {
     }
 
     public Cache build() {
+        // 设置默认的缓存实现，设置默认的缓存类型（PerpetualCache）和缓存装饰器（LruCache）
         setDefaultImplementations();
+        // 反射生成缓存实例
         Cache cache = newBaseCacheInstance(implementation, id);
+        // 设置配置的属性值
         setCacheProperties(cache);
-        // issue #352, do not apply decorators to custom caches
+        // issue #352, do not apply decorators to custom caches 只对PerpetualCache缓存应用装饰器
         if (PerpetualCache.class.equals(cache.getClass())) {
             for (Class<? extends Cache> decorator : decorators) {
                 cache = newCacheDecoratorInstance(decorator, cache);
                 setCacheProperties(cache);
             }
+            // 应用标准装饰器
             cache = setStandardDecorators(cache);
         } else if (!LoggingCache.class.isAssignableFrom(cache.getClass())) {
             cache = new LoggingCache(cache);
@@ -113,18 +117,26 @@ public class CacheBuilder {
     private Cache setStandardDecorators(Cache cache) {
         try {
             MetaObject metaCache = SystemMetaObject.forObject(cache);
+            // 设置size
             if (size != null && metaCache.hasSetter("size")) {
                 metaCache.setValue("size", size);
             }
+            // clearInterval 不为空，应用 ScheduledCache 装饰器
             if (clearInterval != null) {
                 cache = new ScheduledCache(cache);
                 ((ScheduledCache) cache).setClearInterval(clearInterval);
             }
+            // readWrite 为 true，应用 SerializedCache 装饰器
             if (readWrite) {
                 cache = new SerializedCache(cache);
             }
+            /*
+             * 应用 LoggingCache，SynchronizedCache 装饰器，
+             * 使原缓存具备打印日志和线程同步的能力
+             */
             cache = new LoggingCache(cache);
             cache = new SynchronizedCache(cache);
+            // blocking 为 true，应用 BlockingCache 装饰器
             if (blocking) {
                 cache = new BlockingCache(cache);
             }
@@ -136,11 +148,13 @@ public class CacheBuilder {
 
     private void setCacheProperties(Cache cache) {
         if (properties != null) {
+            // 为缓存实例生成一个“元信息”实例
             MetaObject metaCache = SystemMetaObject.forObject(cache);
             for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                 String name = (String) entry.getKey();
                 String value = (String) entry.getValue();
                 if (metaCache.hasSetter(name)) {
+                    // setter入参类型
                     Class<?> type = metaCache.getSetterType(name);
                     if (String.class == type) {
                         metaCache.setValue(name, value);
@@ -171,6 +185,7 @@ public class CacheBuilder {
                 }
             }
         }
+        // 如果缓存类实现了 InitializingObject 接口，则调用 initialize 方法执行初始化逻辑
         if (InitializingObject.class.isAssignableFrom(cache.getClass())) {
             try {
                 ((InitializingObject) cache).initialize();

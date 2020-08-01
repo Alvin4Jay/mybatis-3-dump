@@ -82,11 +82,14 @@ public class Jdbc3KeyGenerator implements KeyGenerator {
     }
 
     public void processBatch(MappedStatement ms, Statement stmt, Object parameter) {
+        // 获取主键字段
         final String[] keyProperties = ms.getKeyProperties();
         if (keyProperties == null || keyProperties.length == 0) {
             return;
         }
+        // 获取主键值
         try (ResultSet rs = stmt.getGeneratedKeys()) {
+            // 获取结果集 ResultSet 的元数据
             final ResultSetMetaData rsmd = rs.getMetaData();
             final Configuration configuration = ms.getConfiguration();
             if (rsmd.getColumnCount() < keyProperties.length) {

@@ -29,16 +29,18 @@ class GenericTokenParserTest {
 
     @Test
     void shouldDemonstrateGenericTokenReplacement() {
-        GenericTokenParser parser = new GenericTokenParser("${", "}", new VariableTokenHandler(new HashMap<String, String>() {
-            {
-                put("first_name", "James");
-                put("initial", "T");
-                put("last_name", "Kirk");
-                put("var{with}brace", "Hiya");
-                put("", "");
-            }
-        }));
+        GenericTokenParser parser = new GenericTokenParser("${", "}",
+            new VariableTokenHandler(new HashMap<String, String>() {
+                {
+                    put("first_name", "James");
+                    put("initial", "T");
+                    put("last_name", "Kirk");
+                    put("var{with}brace", "Hiya");
+                    put("", "");
+                }
+            }));
 
+        assertEquals("SELECT * FROM article WHERE author = 'James'", parser.parse("SELECT * FROM article WHERE author = '${first_name}'"));
         assertEquals("James T Kirk reporting.", parser.parse("${first_name} ${initial} ${last_name} reporting."));
         assertEquals("Hello captain James T Kirk", parser.parse("Hello captain ${first_name} ${initial} ${last_name}"));
         assertEquals("James T Kirk", parser.parse("${first_name} ${initial} ${last_name}"));

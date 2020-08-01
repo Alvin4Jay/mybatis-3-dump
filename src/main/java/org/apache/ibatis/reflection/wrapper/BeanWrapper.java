@@ -38,10 +38,12 @@ public class BeanWrapper extends BaseWrapper {
 
     @Override
     public Object get(PropertyTokenizer prop) {
+        // 存在集合索引或者Map的key
         if (prop.getIndex() != null) {
             Object collection = resolveCollection(prop, object);
             return getCollectionValue(prop, collection);
         } else {
+            // 非集合
             return getBeanProperty(prop, object);
         }
     }
@@ -103,7 +105,9 @@ public class BeanWrapper extends BaseWrapper {
 
     @Override
     public boolean hasSetter(String name) {
+        // 对name进行分析
         PropertyTokenizer prop = new PropertyTokenizer(name);
+        // 判断是否存在子属性xx.yy
         if (prop.hasNext()) {
             if (metaClass.hasSetter(prop.getIndexedName())) {
                 MetaObject metaValue = metaObject.metaObjectForProperty(prop.getIndexedName());
@@ -145,10 +149,12 @@ public class BeanWrapper extends BaseWrapper {
         Class<?> type = getSetterType(prop.getName());
         try {
             Object newObject = objectFactory.create(type);
-            metaValue = MetaObject.forObject(newObject, metaObject.getObjectFactory(), metaObject.getObjectWrapperFactory(), metaObject.getReflectorFactory());
+            metaValue = MetaObject.forObject(newObject, metaObject.getObjectFactory(),
+                metaObject.getObjectWrapperFactory(), metaObject.getReflectorFactory());
             set(prop, newObject);
         } catch (Exception e) {
-            throw new ReflectionException("Cannot set value of property '" + name + "' because '" + name + "' is null and cannot be instantiated on instance of " + type.getName() + ". Cause:" + e.toString(), e);
+            throw new ReflectionException("Cannot set value of property '" + name + "' because '" + name +
+                "' is null and cannot be instantiated on instance of " + type.getName() + ". Cause:" + e.toString(), e);
         }
         return metaValue;
     }
@@ -164,7 +170,8 @@ public class BeanWrapper extends BaseWrapper {
         } catch (RuntimeException e) {
             throw e;
         } catch (Throwable t) {
-            throw new ReflectionException("Could not get property '" + prop.getName() + "' from " + object.getClass() + ".  Cause: " + t.toString(), t);
+            throw new ReflectionException("Could not get property '" + prop.getName() + "' from " + object.getClass()
+                + ".  Cause: " + t.toString(), t);
         }
     }
 

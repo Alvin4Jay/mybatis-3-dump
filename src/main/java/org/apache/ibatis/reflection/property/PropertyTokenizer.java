@@ -18,6 +18,8 @@ package org.apache.ibatis.reflection.property;
 import java.util.Iterator;
 
 /**
+ * 属性名分词器
+ *
  * @author Clinton Begin
  */
 public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
@@ -27,18 +29,39 @@ public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
     private String index;
 
     public PropertyTokenizer(String fullname) {
+        // 检测传入的参数中是否包含字符 '.'
         int delim = fullname.indexOf('.');
         if (delim > -1) {
+            /*
+             * 以点位为界，进行分割。比如：
+             *    fullname = xx.yy.zz
+             *
+             * 以第一个点为分界符：
+             *    name = xx
+             *    children = yy.zz
+             */
             name = fullname.substring(0, delim);
             children = fullname.substring(delim + 1);
         } else {
+            // fullname 中不存在字符 '.'
             name = fullname;
             children = null;
         }
         indexedName = name;
-        delim = name.indexOf('[');
+        // 检测传入的参数中是否包含字符 '['
+        delim = name.indexOf('['); // 数组 xx[]
         if (delim > -1) {
+            /*
+             * 获取中括号里的内容，比如：
+             *   1. 对于数组或List集合：[] 中的内容为数组下标，
+             *      比如 fullname = articles[1]，index = 1
+             *   2. 对于Map：[] 中的内容为键，
+             *      比如 fullname = xxxMap[keyName]，index = keyName
+             *
+             * 关于 index 属性的用法，可以参考 BaseWrapper 的 getCollectionValue 方法
+             */
             index = name.substring(delim + 1, name.length() - 1);
+            // 获取分解符前面的内容，比如 fullname = articles[1]，name = articles
             name = name.substring(0, delim);
         }
     }
@@ -66,6 +89,7 @@ public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
 
     @Override
     public PropertyTokenizer next() {
+        // 对 children 进行再次切分，用于解析多重复合属性
         return new PropertyTokenizer(children);
     }
 

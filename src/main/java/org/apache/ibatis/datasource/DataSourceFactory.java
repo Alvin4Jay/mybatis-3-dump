@@ -19,6 +19,8 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
+ * 数据源工厂
+ *
  * @author Clinton Begin
  */
 public interface DataSourceFactory {

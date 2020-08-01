@@ -52,7 +52,8 @@ public class ResultLoader {
     protected boolean loaded;
     protected Object resultObject;
 
-    public ResultLoader(Configuration config, Executor executor, MappedStatement mappedStatement, Object parameterObject, Class<?> targetType, CacheKey cacheKey, BoundSql boundSql) {
+    public ResultLoader(Configuration config, Executor executor, MappedStatement mappedStatement,
+                        Object parameterObject, Class<?> targetType, CacheKey cacheKey, BoundSql boundSql) {
         this.configuration = config;
         this.executor = executor;
         this.mappedStatement = mappedStatement;

@@ -26,6 +26,7 @@ import java.io.*;
  */
 public class SerializedCache implements Cache {
 
+    /** 被装饰者 */
     private final Cache delegate;
 
     public SerializedCache(Cache delegate) {

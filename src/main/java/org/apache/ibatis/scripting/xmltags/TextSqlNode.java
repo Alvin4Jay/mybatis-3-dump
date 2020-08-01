@@ -23,6 +23,8 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
 import java.util.regex.Pattern;
 
 /**
+ * 存储SQL中带有<code>${}</code>占位符的文本
+ *
  * @author Clinton Begin
  */
 public class TextSqlNode implements SqlNode {
@@ -38,6 +40,9 @@ public class TextSqlNode implements SqlNode {
         this.injectionFilter = injectionFilter;
     }
 
+    /**
+     * 判断是否包含${}占位符
+     */
     public boolean isDynamic() {
         DynamicCheckerTokenParser checker = new DynamicCheckerTokenParser();
         GenericTokenParser parser = createParser(checker);
@@ -47,12 +52,15 @@ public class TextSqlNode implements SqlNode {
 
     @Override
     public boolean apply(DynamicContext context) {
+        // 创建 ${} 占位符解析器
         GenericTokenParser parser = createParser(new BindingTokenParser(context, injectionFilter));
+        // 解析 ${} 占位符，并将解析结果添加到 DynamicContext 中
         context.appendSql(parser.parse(text));
         return true;
     }
 
     private GenericTokenParser createParser(TokenHandler handler) {
+        // 创建占位符解析器，GenericTokenParser 是一个通用解析器，并非只能解析 ${}
         return new GenericTokenParser("${", "}", handler);
     }
 
@@ -74,12 +82,15 @@ public class TextSqlNode implements SqlNode {
             } else if (SimpleTypeRegistry.isSimpleType(parameter.getClass())) {
                 context.getBindings().put("value", parameter);
             }
+            // 通过 OGNL 从用户传入的参数中获取结果
             Object value = OgnlCache.getValue(content, context.getBindings());
             String srtValue = value == null ? "" : String.valueOf(value); // issue #274 return "" instead of "null"
+            // 通过正则表达式检测 srtValue 有效性
             checkInjection(srtValue);
             return srtValue;
         }
 
+        /** 通过正则表达式检测 srtValue 有效性 */
         private void checkInjection(String value) {
             if (injectionFilter != null && !injectionFilter.matcher(value).matches()) {
                 throw new ScriptingException("Invalid input. Please conform to regex" + injectionFilter.pattern());

@@ -41,6 +41,7 @@ public abstract class BaseStatementHandler implements StatementHandler {
     protected final Configuration configuration;
     protected final ObjectFactory objectFactory;
     protected final TypeHandlerRegistry typeHandlerRegistry;
+
     protected final ResultSetHandler resultSetHandler;
     protected final ParameterHandler parameterHandler;
 
@@ -50,7 +51,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
     protected BoundSql boundSql;
 
-    protected BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    protected BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject,
+                                   RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         this.configuration = mappedStatement.getConfiguration();
         this.executor = executor;
         this.mappedStatement = mappedStatement;
@@ -67,7 +69,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
         this.boundSql = boundSql;
 
         this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, rowBounds, parameterHandler, resultHandler, boundSql);
+        this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, rowBounds,
+            parameterHandler, resultHandler, boundSql);
     }
 
     @Override
@@ -85,8 +88,11 @@ public abstract class BaseStatementHandler implements StatementHandler {
         ErrorContext.instance().sql(boundSql.getSql());
         Statement statement = null;
         try {
+            // 创建statement
             statement = instantiateStatement(connection);
+            // 设置执行超时
             setStatementTimeout(statement, transactionTimeout);
+            // 设置fetchSize https://www.javazhiyin.com/9801.html
             setFetchSize(statement);
             return statement;
         } catch (SQLException e) {
@@ -107,9 +113,11 @@ public abstract class BaseStatementHandler implements StatementHandler {
         } else if (configuration.getDefaultStatementTimeout() != null) {
             queryTimeout = configuration.getDefaultStatementTimeout();
         }
+        // 设置执行超时
         if (queryTimeout != null) {
             stmt.setQueryTimeout(queryTimeout);
         }
+        // 应用事务超时到statement
         StatementUtil.applyTransactionTimeout(stmt, queryTimeout, transactionTimeout);
     }
 

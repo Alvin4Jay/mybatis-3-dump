@@ -78,9 +78,8 @@ public class XNode {
             if (current != this) {
                 builder.insert(0, "_");
             }
-            String value = current.getStringAttribute("id",
-                current.getStringAttribute("value",
-                    current.getStringAttribute("property", (String) null)));
+            String value = current.getStringAttribute("id", current.getStringAttribute("value",
+                current.getStringAttribute("property", (String) null)));
             if (value != null) {
                 value = value.replace('.', '_');
                 builder.insert(0, "]");

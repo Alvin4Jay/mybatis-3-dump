@@ -32,7 +32,8 @@ import java.util.List;
  */
 public class CallableStatementHandler extends BaseStatementHandler {
 
-    public CallableStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    public CallableStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter,
+                                    RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         super(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
     }
 

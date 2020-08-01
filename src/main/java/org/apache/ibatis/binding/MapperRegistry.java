@@ -43,6 +43,7 @@ public class MapperRegistry {
             throw new BindingException("Type " + type + " is not known to the MapperRegistry.");
         }
         try {
+            // 创建代理对象
             return mapperProxyFactory.newInstance(sqlSession);
         } catch (Exception e) {
             throw new BindingException("Error getting mapper instance. Cause: " + e, e);
@@ -54,17 +55,24 @@ public class MapperRegistry {
     }
 
     public <T> void addMapper(Class<T> type) {
+        // namespace必须是接口
         if (type.isInterface()) {
             if (hasMapper(type)) {
                 throw new BindingException("Type " + type + " is already known to the MapperRegistry.");
             }
             boolean loadCompleted = false;
             try {
+                /*
+                 * 将 type 和 MapperProxyFactory 进行绑定，
+                 * MapperProxyFactory 可为 mapper 接口生成代理类
+                 */
                 knownMappers.put(type, new MapperProxyFactory<>(type));
                 // It's important that the type is added before the parser is run
                 // otherwise the binding may automatically be attempted by the
                 // mapper parser. If the type is already known, it won't try.
+                // 创建注解解析器。在 MyBatis 中，有 XML 和 注解两种配置方式可选
                 MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
+                // 解析注解中的信息
                 parser.parse();
                 loadCompleted = true;
             } finally {

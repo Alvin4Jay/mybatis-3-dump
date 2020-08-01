@@ -40,7 +40,8 @@ public class StatementUtil {
      * @param transactionTimeout a transaction timeout
      * @throws SQLException if a database access error occurs, this method is called on a closed <code>Statement</code>
      */
-    public static void applyTransactionTimeout(Statement statement, Integer queryTimeout, Integer transactionTimeout) throws SQLException {
+    public static void applyTransactionTimeout(Statement statement, Integer queryTimeout, Integer transactionTimeout)
+        throws SQLException {
         if (transactionTimeout == null) {
             return;
         }

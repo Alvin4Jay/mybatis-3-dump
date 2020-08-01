@@ -29,6 +29,7 @@ public class ParamNameResolver {
 
     public static final String GENERIC_NAME_PREFIX = "param";
 
+    // default: true
     private final boolean useActualParamName;
 
     /**
@@ -46,16 +47,21 @@ public class ParamNameResolver {
      */
     private final SortedMap<Integer, String> names;
 
+    // 参数中是否存在@Param注解
     private boolean hasParamAnnotation;
 
     public ParamNameResolver(Configuration config, Method method) {
-        this.useActualParamName = config.isUseActualParamName();
+        this.useActualParamName = config.isUseActualParamName(); // true
+        // 参数类型列表
         final Class<?>[] paramTypes = method.getParameterTypes();
+        // 参数注解
         final Annotation[][] paramAnnotations = method.getParameterAnnotations();
         final SortedMap<Integer, String> map = new TreeMap<>();
         int paramCount = paramAnnotations.length;
+        // 解析参数名称
         // get names from @Param annotations
         for (int paramIndex = 0; paramIndex < paramCount; paramIndex++) {
+            // 特殊参数跳过
             if (isSpecialParameter(paramTypes[paramIndex])) {
                 // skip special parameters
                 continue;
@@ -68,14 +74,30 @@ public class ParamNameResolver {
                     break;
                 }
             }
+            // name 为空，表明未给参数配置 @Param 注解
             if (name == null) {
                 // @Param was not specified.
                 if (useActualParamName) {
+                    /*
+                     * 通过反射获取参数名称。此种方式要求 JDK 版本为 1.8+，
+                     * 且要求编译时加入 -parameters 参数，否则获取到的参数名
+                     * 仍然是 arg1, arg2, ..., argN
+                     */
                     name = getActualParamName(method, paramIndex);
                 }
                 if (name == null) {
                     // use the parameter index as the name ("0", "1", ...)
                     // gcode issue #71
+                    /*
+                     * 使用 map.size() 返回值作为名称，思考一下为什么不这样写：
+                     *   name = String.valueOf(paramIndex);
+                     * 因为如果参数列表中包含 RowBounds 或 ResultHandler，这两个参数
+                     * 会被忽略掉，这样将导致名称不连续。
+                     *
+                     * 比如参数列表 (int p1, int p2, RowBounds rb, int p3)
+                     *  - 期望得到名称列表为 ["0", "1", "2"]
+                     *  - 实际得到名称列表为 ["0", "1", "3"]
+                     */
                     name = String.valueOf(map.size());
                 }
             }
@@ -141,25 +163,43 @@ public class ParamNameResolver {
      * @return the named params
      */
     public Object getNamedParams(Object[] args) {
+        // 非特殊类型的参数个数
         final int paramCount = names.size();
         if (args == null || paramCount == 0) {
             return null;
         } else if (!hasParamAnnotation && paramCount == 1) {
+            /*
+             * 如果方法参数列表无 @Param 注解，且仅有一个非特别参数，则返回该参数的值。
+             * 比如如下方法：
+             *     List findList(RowBounds rb, String name)
+             * names 如下：
+             *     names = {1 : "0"}
+             * 此种情况下，返回 args[names.firstKey()]，即 args[1] -> name
+             */
             Object value = args[names.firstKey()];
             return wrapToMapIfCollection(value, useActualParamName ? names.get(0) : null);
         } else {
             final Map<String, Object> param = new ParamMap<>();
             int i = 0;
             for (Map.Entry<Integer, String> entry : names.entrySet()) {
+                // 添加 <参数名, 参数值> 键值对到 param 中
                 param.put(entry.getValue(), args[entry.getKey()]);
                 // add generic param names (param1, param2, ...)
                 final String genericParamName = GENERIC_NAME_PREFIX + (i + 1);
                 // ensure not to overwrite parameter named with @Param
+                /*
+                 * 检测 names 中是否包含 genericParamName，什么情况下会包含？答案如下：
+                 *
+                 *   使用者显式将参数名称配置为 param1，即 @Param("param1")
+                 */
                 if (!names.containsValue(genericParamName)) {
+                    // 添加 <param*, value> 到 param 中
                     param.put(genericParamName, args[entry.getKey()]);
                 }
                 i++;
             }
+
+            // Map
             return param;
         }
     }

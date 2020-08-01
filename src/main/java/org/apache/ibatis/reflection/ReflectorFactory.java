@@ -15,6 +15,9 @@
  */
 package org.apache.ibatis.reflection;
 
+/**
+ * 用于创建Reflector，同时兼有缓存的功能
+ */
 public interface ReflectorFactory {
 
     boolean isClassCacheEnabled();

@@ -21,12 +21,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 存储SQL中的<set>节点
+ *
  * @author Clinton Begin
  */
 public class SetSqlNode extends TrimSqlNode {
 
     private static final List<String> COMMA = Collections.singletonList(",");
 
+    /**
+     * @param configuration  全局配置
+     * @param contents set节点内的节点内容
+     */
     public SetSqlNode(Configuration configuration, SqlNode contents) {
         super(configuration, contents, "SET", COMMA, null, COMMA);
     }

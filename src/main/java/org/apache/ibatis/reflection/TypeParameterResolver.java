@@ -162,7 +162,7 @@ public class TypeParameterResolver {
         }
 
         if (clazz == declaringClass) {
-            Type[] bounds = typeVar.getBounds();
+            Type[] bounds = typeVar.getBounds(); // 上边界
             if (bounds.length > 0) {
                 return bounds[0];
             }

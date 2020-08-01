@@ -21,6 +21,8 @@ import org.apache.ibatis.mapping.MappedStatement;
 import java.sql.Statement;
 
 /**
+ * 主键生成器
+ *
  * @author Clinton Begin
  */
 public interface KeyGenerator {

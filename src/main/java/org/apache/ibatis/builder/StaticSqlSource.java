@@ -27,7 +27,11 @@ import java.util.List;
  */
 public class StaticSqlSource implements SqlSource {
 
+    /** 包含 ? 占位符的SQL */
     private final String sql;
+    /**
+     * #{} 占位符解析后得到的parameterMappings
+     */
     private final List<ParameterMapping> parameterMappings;
     private final Configuration configuration;
 
@@ -43,6 +47,7 @@ public class StaticSqlSource implements SqlSource {
 
     @Override
     public BoundSql getBoundSql(Object parameterObject) {
+        // 创建 BoundSql 对象
         return new BoundSql(configuration, sql, parameterMappings, parameterObject);
     }
 

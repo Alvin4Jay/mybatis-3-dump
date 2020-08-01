@@ -29,12 +29,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * Executor装饰器
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
 public class CachingExecutor implements Executor {
 
+    /** 被装饰者 */
     private final Executor delegate;
+    /** 事务缓存管理器 */
     private final TransactionalCacheManager tcm = new TransactionalCacheManager();
 
     public CachingExecutor(Executor delegate) {
@@ -68,6 +72,7 @@ public class CachingExecutor implements Executor {
 
     @Override
     public int update(MappedStatement ms, Object parameterObject) throws SQLException {
+        // 清除二级缓存
         flushCacheIfRequired(ms);
         return delegate.update(ms, parameterObject);
     }
@@ -79,29 +84,40 @@ public class CachingExecutor implements Executor {
     }
 
     @Override
-    public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
+    public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds,
+                             ResultHandler resultHandler) throws SQLException {
+        // 获取BoundSql
         BoundSql boundSql = ms.getBoundSql(parameterObject);
+        // 创建CacheKey
         CacheKey key = createCacheKey(ms, parameterObject, rowBounds, boundSql);
+        // 调用重载方法query
         return query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
     }
 
     @Override
-    public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
-        throws SQLException {
+    public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds,
+                             ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
+        // 从 MappedStatement 中获取二级缓存(全局，以Mapper namespace区分)，不是由 CachingExecutor 创建的
         Cache cache = ms.getCache();
+        // 若Mapper映射文件中未配置缓存<cache>或参照缓存<cache-ref>，此时 cache = null
         if (cache != null) {
             flushCacheIfRequired(ms);
             if (ms.isUseCache() && resultHandler == null) {
                 ensureNoOutParams(ms, boundSql);
+                // 访问二级缓存
                 @SuppressWarnings("unchecked")
                 List<E> list = (List<E>) tcm.getObject(cache, key);
+                // 若缓存未命中，则调用被装饰类的 query 方法
                 if (list == null) {
+                    // 向一级缓存或者数据库进行查询
                     list = delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+                    // 缓存查询结果
                     tcm.putObject(cache, key, list); // issue #578 and #116
                 }
                 return list;
             }
         }
+        // 调用被装饰类的 query 方法
         return delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
     }
 
@@ -131,7 +147,8 @@ public class CachingExecutor implements Executor {
         if (ms.getStatementType() == StatementType.CALLABLE) {
             for (ParameterMapping parameterMapping : boundSql.getParameterMappings()) {
                 if (parameterMapping.getMode() != ParameterMode.IN) {
-                    throw new ExecutorException("Caching stored procedures with OUT params is not supported.  Please configure useCache=false in " + ms.getId() + " statement.");
+                    throw new ExecutorException("Caching stored procedures with OUT params is not supported.  " +
+                        "Please configure useCache=false in " + ms.getId() + " statement.");
                 }
             }
         }
@@ -157,7 +174,9 @@ public class CachingExecutor implements Executor {
         delegate.clearLocalCache();
     }
 
+    /** 清除二级缓存(mapper级别) */
     private void flushCacheIfRequired(MappedStatement ms) {
+        // 获取二级缓存
         Cache cache = ms.getCache();
         if (cache != null && ms.isFlushCacheRequired()) {
             tcm.clear(cache);

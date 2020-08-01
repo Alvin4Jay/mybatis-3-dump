@@ -44,7 +44,9 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     static {
         Method privateLookupIn;
         try {
-            privateLookupIn = MethodHandles.class.getMethod("privateLookupIn", Class.class, MethodHandles.Lookup.class);
+            // 判断MethodHandles类中是否有privateLookupIn方法，该方法是java9中才有的
+            privateLookupIn = MethodHandles.class.getMethod("privateLookupIn", Class.class,
+                MethodHandles.Lookup.class);
         } catch (NoSuchMethodException e) {
             privateLookupIn = null;
         }
@@ -58,7 +60,8 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
                 lookup.setAccessible(true);
             } catch (NoSuchMethodException e) {
                 throw new IllegalStateException(
-                    "There is neither 'privateLookupIn(Class, Lookup)' nor 'Lookup(Class, int)' method in java.lang.invoke.MethodHandles.",
+                    "There is neither 'privateLookupIn(Class, Lookup)' nor 'Lookup(Class, int)' method " +
+                        "in java.lang.invoke.MethodHandles.",
                     e);
             } catch (Exception e) {
                 lookup = null;
@@ -80,9 +83,11 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
+            // 判断是否是Object中的方法
             if (Object.class.equals(method.getDeclaringClass())) {
                 return method.invoke(this, args);
             } else {
+                // 执行增删查改操作，缓存MapperMethodInvoker
                 return cachedInvoker(method).invoke(proxy, method, args, sqlSession);
             }
         } catch (Throwable t) {
@@ -93,11 +98,14 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     private MapperMethodInvoker cachedInvoker(Method method) throws Throwable {
         try {
             return methodCache.computeIfAbsent(method, m -> {
+                // 默认方法
                 if (m.isDefault()) {
                     try {
+                        // privateLookupInMethod=null, 表示是Java8
                         if (privateLookupInMethod == null) {
                             return new DefaultMethodInvoker(getMethodHandleJava8(method));
                         } else {
+                            // Java9
                             return new DefaultMethodInvoker(getMethodHandleJava9(method));
                         }
                     } catch (IllegalAccessException | InstantiationException | InvocationTargetException
@@ -156,6 +164,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args, SqlSession sqlSession) throws Throwable {
+            // 默认方法调用
             return methodHandle.bindTo(proxy).invokeWithArguments(args);
         }
     }

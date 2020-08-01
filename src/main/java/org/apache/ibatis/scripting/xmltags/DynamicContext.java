@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 /**
+ * SQL 语句构建的上下文
+ *
  * @author Clinton Begin
  */
 public class DynamicContext {
@@ -37,18 +39,23 @@ public class DynamicContext {
         OgnlRuntime.setPropertyAccessor(ContextMap.class, new ContextAccessor());
     }
 
+    /** 用于存储一些额外的信息，比如运行时参数 和 databaseId 等 */
     private final ContextMap bindings;
+    /** 存放SQL片段拼装结果 */
     private final StringJoiner sqlBuilder = new StringJoiner(" ");
     private int uniqueNumber = 0;
 
     public DynamicContext(Configuration configuration, Object parameterObject) {
+        // 创建ContextMap
         if (parameterObject != null && !(parameterObject instanceof Map)) {
             MetaObject metaObject = configuration.newMetaObject(parameterObject);
-            boolean existsTypeHandler = configuration.getTypeHandlerRegistry().hasTypeHandler(parameterObject.getClass());
+            boolean existsTypeHandler = configuration.getTypeHandlerRegistry()
+                .hasTypeHandler(parameterObject.getClass());
             bindings = new ContextMap(metaObject, existsTypeHandler);
         } else {
             bindings = new ContextMap(null, false);
         }
+        // 存放运行时参数 parameterObject 以及 databaseId
         bindings.put(PARAMETER_OBJECT_KEY, parameterObject);
         bindings.put(DATABASE_ID_KEY, configuration.getDatabaseId());
     }
@@ -86,6 +93,7 @@ public class DynamicContext {
         @Override
         public Object get(Object key) {
             String strKey = (String) key;
+            // 检查是否包含 strKey，若包含则直接返回
             if (super.containsKey(strKey)) {
                 return super.get(strKey);
             }
@@ -98,6 +106,7 @@ public class DynamicContext {
                 return parameterMetaObject.getOriginalObject();
             } else {
                 // issue #61 do not modify the context when reading
+                // 从运行时参数中查找结果
                 return parameterMetaObject.getValue(strKey);
             }
         }

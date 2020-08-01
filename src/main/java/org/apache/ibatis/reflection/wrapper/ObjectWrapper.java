@@ -30,6 +30,12 @@ public interface ObjectWrapper {
 
     void set(PropertyTokenizer prop, Object value);
 
+    /**
+     *
+     * @param name
+     * @param useCamelCaseMapping
+     * @return
+     */
     String findProperty(String name, boolean useCamelCaseMapping);
 
     String[] getGetterNames();

@@ -21,13 +21,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 存储SQL中的<where>节点
+ *
  * @author Clinton Begin
  */
 public class WhereSqlNode extends TrimSqlNode {
 
-    private static List<String> prefixList = Arrays.asList("AND ", "OR ", "AND\n", "OR\n", "AND\r", "OR\r", "AND\t", "OR\t");
+    private static List<String> prefixList =
+        Arrays.asList("AND ", "OR ", "AND\n", "OR\n", "AND\r", "OR\r", "AND\t", "OR\t");
 
+    /**
+     * @param configuration  全局配置
+     * @param contents where节点内的节点内容
+     */
     public WhereSqlNode(Configuration configuration, SqlNode contents) {
+        // 调用父类的构造方法
         super(configuration, contents, "WHERE", prefixList, null, null);
     }
 

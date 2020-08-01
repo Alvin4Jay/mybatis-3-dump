@@ -20,10 +20,13 @@ import org.apache.ibatis.cache.Cache;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 根据clearInterval清除缓存
+ *
  * @author Clinton Begin
  */
 public class ScheduledCache implements Cache {
 
+    /** 被装饰者 */
     private final Cache delegate;
     protected long clearInterval;
     protected long lastClear;

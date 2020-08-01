@@ -86,9 +86,10 @@ public class Configuration {
     protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry(this);
     protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
     protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
-    protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
-        .conflictMessageProducer((savedValue, targetValue) ->
-            ". please check " + savedValue.getResource() + " and " + targetValue.getResource());
+    protected final Map<String, MappedStatement> mappedStatements =
+        new StrictMap<MappedStatement>("Mapped Statements collection")
+            .conflictMessageProducer((savedValue, targetValue) -> ". please check "
+                + savedValue.getResource() + " and " + targetValue.getResource());
     protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
     protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
     protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
@@ -129,6 +130,7 @@ public class Configuration {
     protected ExecutorType defaultExecutorType = ExecutorType.SIMPLE;
     protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
     protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
+    // 属性变量
     protected Properties variables = new Properties();
     protected ReflectorFactory reflectorFactory = new DefaultReflectorFactory();
     protected ObjectFactory objectFactory = new DefaultObjectFactory();
@@ -150,13 +152,16 @@ public class Configuration {
     }
 
     public Configuration() {
+        // 注册事务工厂的别名
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);
 
+        // 注册数据源工厂的别名
         typeAliasRegistry.registerAlias("JNDI", JndiDataSourceFactory.class);
         typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
         typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
 
+        // 注册缓存策略的别名
         typeAliasRegistry.registerAlias("PERPETUAL", PerpetualCache.class);
         typeAliasRegistry.registerAlias("FIFO", FifoCache.class);
         typeAliasRegistry.registerAlias("LRU", LruCache.class);
@@ -168,6 +173,7 @@ public class Configuration {
         typeAliasRegistry.registerAlias("XML", XMLLanguageDriver.class);
         typeAliasRegistry.registerAlias("RAW", RawLanguageDriver.class);
 
+        // 注册日志类的别名
         typeAliasRegistry.registerAlias("SLF4J", Slf4jImpl.class);
         typeAliasRegistry.registerAlias("COMMONS_LOGGING", JakartaCommonsLoggingImpl.class);
         typeAliasRegistry.registerAlias("LOG4J", Log4jImpl.class);
@@ -176,6 +182,7 @@ public class Configuration {
         typeAliasRegistry.registerAlias("STDOUT_LOGGING", StdOutImpl.class);
         typeAliasRegistry.registerAlias("NO_LOGGING", NoLoggingImpl.class);
 
+        // 注册动态代理工厂的别名
         typeAliasRegistry.registerAlias("CGLIB", CglibProxyFactory.class);
         typeAliasRegistry.registerAlias("JAVASSIST", JavassistProxyFactory.class);
 
@@ -581,21 +588,35 @@ public class Configuration {
         return MetaObject.forObject(object, objectFactory, objectWrapperFactory, reflectorFactory);
     }
 
-    public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+    public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject,
+                                                BoundSql boundSql) {
+        // 创建DefaultParameterHandler
+        ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement,
+            parameterObject, boundSql);
+        // 生产拦截器代理
         parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
         return parameterHandler;
     }
 
-    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement,
+                                                RowBounds rowBounds, ParameterHandler parameterHandler,
                                                 ResultHandler resultHandler, BoundSql boundSql) {
-        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+        // 创建DefaultResultSetHandler
+        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler,
+            resultHandler, boundSql, rowBounds);
+        // 创建代理，增加拦截器逻辑
         resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
         return resultSetHandler;
     }
 
-    public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+    // executor: CachingExecutor
+    public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement,
+                                                Object parameterObject, RowBounds rowBounds,
+                                                ResultHandler resultHandler, BoundSql boundSql) {
+        // 创建具有路由功能的 StatementHandler
+        StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject,
+            rowBounds, resultHandler, boundSql);
+        // 应用插件到 StatementHandler 上
         statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
         return statementHandler;
     }
@@ -615,9 +636,11 @@ public class Configuration {
         } else {
             executor = new SimpleExecutor(this, transaction);
         }
+        // 包装
         if (cacheEnabled) {
             executor = new CachingExecutor(executor);
         }
+        // 生成包含拦截器的代理Executor
         executor = (Executor) interceptorChain.pluginAll(executor);
         return executor;
     }
@@ -778,6 +801,7 @@ public class Configuration {
     }
 
     public <T> void addMapper(Class<T> type) {
+        // 通过MapperRegistry绑定Mapper类
         mapperRegistry.addMapper(type);
     }
 
@@ -881,7 +905,8 @@ public class Configuration {
                 if (value instanceof ResultMap) {
                     ResultMap entryResultMap = (ResultMap) value;
                     if (!entryResultMap.hasNestedResultMaps() && entryResultMap.getDiscriminator() != null) {
-                        Collection<String> discriminatedResultMapNames = entryResultMap.getDiscriminator().getDiscriminatorMap().values();
+                        Collection<String> discriminatedResultMapNames =
+                            entryResultMap.getDiscriminator().getDiscriminatorMap().values();
                         if (discriminatedResultMapNames.contains(rm.getId())) {
                             entryResultMap.forceNestedResultMaps();
                         }

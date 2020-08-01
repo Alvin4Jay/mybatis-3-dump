@@ -41,13 +41,21 @@ public class Plugin implements InvocationHandler {
     }
 
     public static Object wrap(Object target, Interceptor interceptor) {
+        // 拦截器的注解数据，即能拦截的方法
+        /*
+         * 获取插件类 @Signature 注解内容，并生成相应的映射结构。形如下面：
+         * {
+         *     Executor.class : [query, update, commit],
+         *     ParameterHandler.class : [getParameterObject, setParameters]
+         * }
+         */
         Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
         Class<?> type = target.getClass();
+        // 需要被拦截的目标接口
         Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
         if (interfaces.length > 0) {
-            return Proxy.newProxyInstance(
-                type.getClassLoader(),
-                interfaces,
+            // 通过 JDK 动态代理为目标类生成代理类
+            return Proxy.newProxyInstance(type.getClassLoader(), interfaces,
                 new Plugin(target, interceptor, signatureMap));
         }
         return target;
@@ -57,17 +65,20 @@ public class Plugin implements InvocationHandler {
         Intercepts interceptsAnnotation = interceptor.getClass().getAnnotation(Intercepts.class);
         // issue #251
         if (interceptsAnnotation == null) {
-            throw new PluginException("No @Intercepts annotation was found in interceptor " + interceptor.getClass().getName());
+            throw new PluginException("No @Intercepts annotation was found in interceptor "
+                + interceptor.getClass().getName());
         }
         Signature[] sigs = interceptsAnnotation.value();
         Map<Class<?>, Set<Method>> signatureMap = new HashMap<>();
         for (Signature sig : sigs) {
             Set<Method> methods = signatureMap.computeIfAbsent(sig.type(), k -> new HashSet<>());
             try {
+                // 查找需要拦截处理的方法
                 Method method = sig.type().getMethod(sig.method(), sig.args());
                 methods.add(method);
             } catch (NoSuchMethodException e) {
-                throw new PluginException("Could not find method on " + sig.type() + " named " + sig.method() + ". Cause: " + e, e);
+                throw new PluginException("Could not find method on " + sig.type() + " named " + sig.method()
+                    + ". Cause: " + e, e);
             }
         }
         return signatureMap;
@@ -89,10 +100,17 @@ public class Plugin implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
+            /*
+             * 获取被拦截方法列表，比如：
+             *    signatureMap.get(Executor.class)，可能返回 [query, update, commit]
+             */
             Set<Method> methods = signatureMap.get(method.getDeclaringClass());
+            // 检测方法列表是否包含被拦截的方法
             if (methods != null && methods.contains(method)) {
+                // 执行插件逻辑
                 return interceptor.intercept(new Invocation(target, method, args));
             }
+            // 执行被拦截的方法
             return method.invoke(target, args);
         } catch (Exception e) {
             throw ExceptionUtil.unwrapThrowable(e);

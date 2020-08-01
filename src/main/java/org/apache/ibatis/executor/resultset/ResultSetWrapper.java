@@ -133,10 +133,11 @@ public class ResultSetWrapper {
         return null;
     }
 
-    private void loadMappedAndUnmappedColumnNames(ResultMap resultMap, String columnPrefix) throws SQLException {
+    private void loadMappedAndUnmappedColumnNames(ResultMap resultMap, String columnPrefix) {
         List<String> mappedColumnNames = new ArrayList<>();
         List<String> unmappedColumnNames = new ArrayList<>();
         final String upperColumnPrefix = columnPrefix == null ? null : columnPrefix.toUpperCase(Locale.ENGLISH);
+        // 添加前缀
         final Set<String> mappedColumns = prependPrefixes(resultMap.getMappedColumns(), upperColumnPrefix);
         for (String columnName : columnNames) {
             final String upperColumnName = columnName.toUpperCase(Locale.ENGLISH);
@@ -159,10 +160,13 @@ public class ResultSetWrapper {
         return mappedColumnNames;
     }
 
+    // 获取未映射的列名
     public List<String> getUnmappedColumnNames(ResultMap resultMap, String columnPrefix) throws SQLException {
         List<String> unMappedColumnNames = unMappedColumnNamesMap.get(getMapKey(resultMap, columnPrefix));
         if (unMappedColumnNames == null) {
+            // 加载已映射和未映射的列名
             loadMappedAndUnmappedColumnNames(resultMap, columnPrefix);
+            // 获取未映射列名
             unMappedColumnNames = unMappedColumnNamesMap.get(getMapKey(resultMap, columnPrefix));
         }
         return unMappedColumnNames;

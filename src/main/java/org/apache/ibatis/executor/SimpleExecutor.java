@@ -45,8 +45,12 @@ public class SimpleExecutor extends BaseExecutor {
         Statement stmt = null;
         try {
             Configuration configuration = ms.getConfiguration();
-            StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, RowBounds.DEFAULT, null, null);
+            // 创建PreparedStatementHandler
+            StatementHandler handler = configuration.newStatementHandler(this, ms, parameter,
+                RowBounds.DEFAULT, null, null);
+            // 创建Statement
             stmt = prepareStatement(handler, ms.getStatementLog());
+            // update
             return handler.update(stmt);
         } finally {
             closeStatement(stmt);
@@ -54,22 +58,30 @@ public class SimpleExecutor extends BaseExecutor {
     }
 
     @Override
-    public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler,
+                               BoundSql boundSql) throws SQLException {
         Statement stmt = null;
         try {
             Configuration configuration = ms.getConfiguration();
-            StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
+            // 创建StatementHandler
+            StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds,
+                resultHandler, boundSql);
+            // 创建statement
             stmt = prepareStatement(handler, ms.getStatementLog());
+            // 执行查询操作
             return handler.query(stmt, resultHandler);
         } finally {
+            // 关闭statement
             closeStatement(stmt);
         }
     }
 
     @Override
-    protected <E> Cursor<E> doQueryCursor(MappedStatement ms, Object parameter, RowBounds rowBounds, BoundSql boundSql) throws SQLException {
+    protected <E> Cursor<E> doQueryCursor(MappedStatement ms, Object parameter, RowBounds rowBounds, BoundSql boundSql)
+        throws SQLException {
         Configuration configuration = ms.getConfiguration();
-        StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, null, boundSql);
+        StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds,
+            null, boundSql);
         Statement stmt = prepareStatement(handler, ms.getStatementLog());
         Cursor<E> cursor = handler.queryCursor(stmt);
         stmt.closeOnCompletion();
@@ -81,10 +93,14 @@ public class SimpleExecutor extends BaseExecutor {
         return Collections.emptyList();
     }
 
+    /** 创建statement */
     private Statement prepareStatement(StatementHandler handler, Log statementLog) throws SQLException {
         Statement stmt;
+        // 获取数据库连接
         Connection connection = getConnection(statementLog);
+        // 创建statement
         stmt = handler.prepare(connection, transaction.getTimeout());
+        // 为statement设置IN参数值
         handler.parameterize(stmt);
         return stmt;
     }

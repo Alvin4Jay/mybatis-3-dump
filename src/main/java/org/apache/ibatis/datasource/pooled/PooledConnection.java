@@ -31,23 +31,30 @@ class PooledConnection implements InvocationHandler {
     private static final String CLOSE = "close";
     private static final Class<?>[] IFACES = new Class<?>[]{Connection.class};
 
+    // 数据库连接的hashCode
     private final int hashCode;
+    // 池化数据源
     private final PooledDataSource dataSource;
+    // 真实的数据库连接
     private final Connection realConnection;
+    // 数据库连接代理
     private final Connection proxyConnection;
+    // 从连接池中取出连接时的时间戳
     private long checkoutTimestamp;
+    // 数据库连接创建时间
     private long createdTimestamp;
+    // 数据库连接最后使用时间
     private long lastUsedTimestamp;
+    // connectionTypeCode = (url + username + password).hashCode()
     private int connectionTypeCode;
+    // 表示连接是否有效
     private boolean valid;
 
     /**
      * Constructor for SimplePooledConnection that uses the Connection and PooledDataSource passed in.
      *
-     * @param connection
-     *          - the connection that is to be presented as a pooled connection
-     * @param dataSource
-     *          - the dataSource that the connection is from
+     * @param connection - the connection that is to be presented as a pooled connection
+     * @param dataSource - the dataSource that the connection is from
      */
     public PooledConnection(Connection connection, PooledDataSource dataSource) {
         this.hashCode = connection.hashCode();
@@ -56,6 +63,7 @@ class PooledConnection implements InvocationHandler {
         this.createdTimestamp = System.currentTimeMillis();
         this.lastUsedTimestamp = System.currentTimeMillis();
         this.valid = true;
+        // 创建 Connection 的代理类对象
         this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);
     }
 
@@ -114,8 +122,7 @@ class PooledConnection implements InvocationHandler {
     /**
      * Setter for the connection type.
      *
-     * @param connectionTypeCode
-     *          - the connection type
+     * @param connectionTypeCode - the connection type
      */
     public void setConnectionTypeCode(int connectionTypeCode) {
         this.connectionTypeCode = connectionTypeCode;
@@ -133,8 +140,7 @@ class PooledConnection implements InvocationHandler {
     /**
      * Setter for the time that the connection was created.
      *
-     * @param createdTimestamp
-     *          - the timestamp
+     * @param createdTimestamp - the timestamp
      */
     public void setCreatedTimestamp(long createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
@@ -152,8 +158,7 @@ class PooledConnection implements InvocationHandler {
     /**
      * Setter for the time that the connection was last used.
      *
-     * @param lastUsedTimestamp
-     *          - the timestamp
+     * @param lastUsedTimestamp - the timestamp
      */
     public void setLastUsedTimestamp(long lastUsedTimestamp) {
         this.lastUsedTimestamp = lastUsedTimestamp;
@@ -189,15 +194,14 @@ class PooledConnection implements InvocationHandler {
     /**
      * Setter for the timestamp that this connection was checked out.
      *
-     * @param timestamp
-     *          the timestamp
+     * @param timestamp the timestamp
      */
     public void setCheckoutTimestamp(long timestamp) {
         this.checkoutTimestamp = timestamp;
     }
 
     /**
-     * Getter for the time that this connection has been checked out.
+     * Getter for the time that this connection has been checked out. 该连接从连接池取出到当前的运行时间
      *
      * @return the time
      */
@@ -213,8 +217,7 @@ class PooledConnection implements InvocationHandler {
     /**
      * Allows comparing this connection to another.
      *
-     * @param obj
-     *          - the other connection to test for equality
+     * @param obj - the other connection to test for equality
      * @see Object#equals(Object)
      */
     @Override
@@ -231,18 +234,17 @@ class PooledConnection implements InvocationHandler {
     /**
      * Required for InvocationHandler implementation.
      *
-     * @param proxy
-     *          - not used
-     * @param method
-     *          - the method to be executed
-     * @param args
-     *          - the parameters to be passed to the method
+     * @param proxy  - not used
+     * @param method - the method to be executed
+     * @param args   - the parameters to be passed to the method
      * @see java.lang.reflect.InvocationHandler#invoke(Object, java.lang.reflect.Method, Object[])
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         String methodName = method.getName();
+        // 调用close()方法时，归还连接
         if (CLOSE.equals(methodName)) {
+            // 回收连接，而不是直接将连接关闭
             dataSource.pushConnection(this);
             return null;
         }
@@ -252,6 +254,7 @@ class PooledConnection implements InvocationHandler {
                 // throw an SQLException instead of a Runtime
                 checkConnection();
             }
+            // 调用真实连接的目标方法
             return method.invoke(realConnection, args);
         } catch (Throwable t) {
             throw ExceptionUtil.unwrapThrowable(t);

@@ -21,13 +21,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 事务缓存管理器
+ *
  * @author Clinton Begin
  */
 public class TransactionalCacheManager {
 
+    /** Cache 与 TransactionalCache 的映射关系表 */
     private final Map<Cache, TransactionalCache> transactionalCaches = new HashMap<>();
 
     public void clear(Cache cache) {
+        // 获取 TransactionalCache 对象，并调用该对象的 clear 方法，下同
         getTransactionalCache(cache).clear();
     }
 

@@ -27,16 +27,20 @@ public class InterceptorChain {
     private final List<Interceptor> interceptors = new ArrayList<>();
 
     public Object pluginAll(Object target) {
+        // 遍历拦截器集合
         for (Interceptor interceptor : interceptors) {
+            // 调用拦截器的plugin方法植入相应的插件逻辑
             target = interceptor.plugin(target);
         }
         return target;
     }
 
+    /** 添加插件实例到 interceptors 集合中 */
     public void addInterceptor(Interceptor interceptor) {
         interceptors.add(interceptor);
     }
 
+    /** 获取插件列表 */
     public List<Interceptor> getInterceptors() {
         return Collections.unmodifiableList(interceptors);
     }

@@ -36,8 +36,9 @@ public class RoutingStatementHandler implements StatementHandler {
 
     private final StatementHandler delegate;
 
-    public RoutingStatementHandler(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-
+    public RoutingStatementHandler(Executor executor, MappedStatement ms, Object parameter,
+                                   RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+        // 根据 StatementType 创建不同的 StatementHandler
         switch (ms.getStatementType()) {
             case STATEMENT:
                 delegate = new SimpleStatementHandler(executor, ms, parameter, rowBounds, resultHandler, boundSql);
@@ -51,7 +52,6 @@ public class RoutingStatementHandler implements StatementHandler {
             default:
                 throw new ExecutorException("Unknown statement type: " + ms.getStatementType());
         }
-
     }
 
     @Override
